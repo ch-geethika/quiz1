@@ -3,6 +3,7 @@ import { ActivatedRoute,Router} from '@angular/router';
 import {QuizService} from '../services/quiz.service';
 import {Iquestions} from '../classes/iquestions';
 import { Icourse } from '../classes/icourse';
+import { ReportCard } from '../classes/report-card';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class TestComponent implements OnInit {
   
   courses : Icourse[] = [];
   Questions : Iquestions[] = [];
+  reportcard : ReportCard;
   QNo:number;
   Marks:number;
   // Courseid: number;
@@ -27,8 +29,11 @@ timeLeft: number = 3600;
 TestStatus:boolean = false;
 Message:string = "";
 ResultStatus:boolean=false;
-
-
+FinalStatus:boolean=false;
+level1_Marks:number ;
+level2_Marks:number;
+level3_Marks:number;
+Today=new Date();
 
    Question:Iquestions=
     {
@@ -49,15 +54,14 @@ ResultStatus:boolean=false;
       this.QNo=0
       this.Marks=0
       this.Level_id=1
+      this.level1_Marks=0
+      this.level2_Marks=0
+      this.level3_Marks=0
+    
      }
  
   ngOnInit(): void {
-    // console.log("hi");
-    // this.quizservice.getcourses(this.router.snapshot.params['Course_id']).subscribe((data: Icourse[])=>{
-    //   console.log(data);
-    //     this.courses = data;
-        
-   // })  
+ 
   this.startTest()
   console.log(this.router.snapshot.params['Course_id'])
   }
@@ -107,28 +111,38 @@ Next()
 
 submitTest()
 {
+  let confirm1 =  confirm("Are you sure you want to submit the test?")
+
+    if(confirm1){
+
+    
 // this.testStatus=false;
       if(this.isAnswered())
       {
           this.Marks=this.Marks+1;
-        
+          
       }
+      if(this.Level_id===1)
+      {
+        this.level1_Marks = this.Marks;
+
+      }
+      else if(this.Level_id===2)
+      {
+        this.level2_Marks = this.Marks;
+      }
+      else if(this.Level_id===3)
+      {
+         this.level3_Marks = this.Marks;
+         
+      }
+
 // this.prompt()
 this.StopTimer()
 this.CalculateMarks()
 this.TestStatus = false;
 }
-// prompt()
-// {
-//   if(confirm("Are you sure to submit the test?"))
-//    {
-//     console.log("Submitted the test");
-//   }
-//   else()
-//   { 
-    
-//   }
-// }
+}
 
 
 Previous()
@@ -181,13 +195,23 @@ Reset()
       {
         this.ResultStatus=true;
         this.TestStatus =true;
-        this.Message="Congratulations! You have passed level 1. Click on next to continue";
+        this.Message="Congratulations! You have passed level" + this.Level_id  + " Click on continue to go to next level.";
+
         // this.route.navigateByUrl('/test/level_id');
       }
       else{
-        this.Message="OOPS!!! You did not clear the Level 1 exam! Better luck next time!";
+        this.Message="OOPS!!! You did not clear the Level" + this.Level_id + " exam! Better luck next time!";
         this.ResultStatus=false;
+        this.FinalStatus=true;
+        this.GenerateReport()
       }
+      if(this.Level_id===3)
+      {
+        this.FinalStatus=true;
+       
+        this.GenerateReport()
+      }
+      
     }
   
     Continue()
@@ -199,7 +223,18 @@ Reset()
       }
      
     }
-
+ GenerateReport()
+   {
+     this.reportcard=new ReportCard()
+     this.reportcard.User_id=1
+     this.reportcard.Course_id= this.router.snapshot.params['Course_id']
+     this.reportcard.Level_1_Marks = this.level1_Marks
+     this.reportcard.Level_2_Marks = this.level2_Marks
+     this.reportcard.Level_3_Marks = this.level3_Marks
+     this.reportcard.Test_Date = this.Today
+     this.quizservice.postreport(this.reportcard).subscribe()
+   }
+ 
     
 
 }

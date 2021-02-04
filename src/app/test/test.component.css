@@ -2,7 +2,7 @@
 
 .poz
 {
-position:absolute;bottom:15px; right:10px;
+position:absolute;top:25px; right:10px;
 }
 body{
     background: url('src\assets\books3.jpg') fixed;

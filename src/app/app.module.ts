@@ -9,6 +9,9 @@ import { CoursesComponent } from './courses/courses.component';
 import { StarttestComponent } from './starttest/starttest.component';
 
 import { CoursesInfoComponent } from './courses-info/courses-info.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import { HomeComponent } from './home/home.component';
+import { Homepage1Component } from './homepage1/homepage1.component';
 
 
 @NgModule({
@@ -18,7 +21,13 @@ import { CoursesInfoComponent } from './courses-info/courses-info.component';
     CoursesComponent,
     StarttestComponent,
   
-    CoursesInfoComponent
+    CoursesInfoComponent,
+  
+    HomepageComponent,
+  
+    HomeComponent,
+  
+    Homepage1Component
   
   ],
   imports: [

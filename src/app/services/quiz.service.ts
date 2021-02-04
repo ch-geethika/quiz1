@@ -40,7 +40,9 @@ export class QuizService {
     return this.http.get<Iquestions[]>
     (this.apiServer + '/questions?courseid='+courseid+'&levelid='+ Level_id )
    }
- 
+   postreport(ReportCard):Observable<number>{
+    return this.http.post<number>(this.apiServer + "/report/", JSON.stringify(ReportCard),this.httpOptions);
+  }​​​​
   }
   
 
